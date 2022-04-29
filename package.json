@@ -4,12 +4,17 @@
   "description": "An app to get the details of people living in London or within a defined radius",
   "main": "app.js",
   "scripts": {
+    "start": "NODE_EXTRA_CA_CERTS='/etc/ssl/certs/ca-certs.pem' node ./app.js",
     "test": "jest",
     "security:audit": "npm audit"
   },
   "author": "Malcolm Marchbank",
   "dependencies": {
+    "axios": "^0.27.2",
     "express": "^4.18.0",
+    "express-openapi-validator": "^4.13.7",
+    "geolib": "^3.3.3",
+    "lodash": "^4.17.21",
     "swagger-ui-express": "^4.3.0",
     "yamljs": "^0.3.0"
   },
