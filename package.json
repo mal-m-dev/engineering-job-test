@@ -5,7 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "NODE_EXTRA_CA_CERTS='/etc/ssl/certs/ca-certs.pem' node ./app.js",
-    "test": "jest",
+    "test": "jest --config ./jest.config.js",
     "security:audit": "npm audit"
   },
   "author": "Malcolm Marchbank",

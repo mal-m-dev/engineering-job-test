@@ -49,19 +49,46 @@ const londonLocationUsers = [
     }
 ];
 
+const req = jest.fn();
+
+const mockSend = {
+    send: jest.fn()
+};
+
+const res = {
+    status: jest.fn(() => {
+        return mockSend;
+    })
+};
+
 describe('searchForPeopleController', () => {
     describe('getLondonUsers', () => {
         it('should exist', function () {
             expect(searchForPeople.getLondonUsers).toBeDefined();
         });
 
-        it('should get users who live in London', function () {
+        it('should get users who live in London', async function () {
 
             //Arrange
-            axios.get.mockImplementationOnce(() => []);
+            axios.get.mockImplementationOnce(() => {return {data: londoners}});
+
             //Act
-            const result = searchForPeople.getLondonUsers();
+            const result = await searchForPeople.getLondonUsers();
             expect(axios.mock).toBeDefined();
+            expect(result).toEqual(londoners);
+        });
+
+        it('should return an error response if the call fails', async function () {
+
+            //Arrange
+            console.error = jest.fn();
+            axios.get.mockImplementationOnce(() => {throw new Error('Fake server error')});
+
+            //Act
+            const result = await searchForPeople.getLondonUsers(req, res);
+            expect(axios.mock).toBeDefined();
+            expect(res.status).toHaveBeenCalledWith(500);
+            expect(mockSend.send).toHaveBeenCalledWith('getLondonUsers call failed');
         });
     });
 
@@ -76,7 +103,7 @@ describe('searchForPeopleController', () => {
             searchForPeople.getAllUsers = jest.fn(() => londoners);
 
             //Act
-            const result = searchForPeople.getAllUsers({}, {});
+            const result = searchForPeople.getAllUsers(req, res);
 
             //Assert
             expect(searchForPeople.getAllUsers).toHaveBeenCalled();
